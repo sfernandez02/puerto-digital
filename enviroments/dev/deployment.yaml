@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: porttrack-app
+  namespace: dev
+  labels:
+    app: porttrack
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: porttrack
+  template:
+    metadata:
+      labels:
+        app: porttrack
+    spec:
+      containers:
+        - name: porttrack
+          image: docker.io/porttrack-app:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENVIRONMENT
+              value: "dev"
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: porttrack-secrets
+                  key: api-key
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20

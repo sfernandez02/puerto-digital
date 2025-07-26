@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: porttrack-rollout
+  namespace: dev
+spec:
+  replicas: 3
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: { duration: 1m }
+        - setWeight: 50
+        - pause: { duration: 2m }
+        - setWeight: 100
+  selector:
+    matchLabels:
+      app: porttrack
+  template:
+    metadata:
+      labels:
+        app: porttrack
+    spec:
+      containers:
+        - name: porttrack
+          image: docker.io/porttrack-app:latest
+          ports:
+            - containerPort: 8080

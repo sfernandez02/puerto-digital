@@ -1,0 +1,10 @@
+groups:
+  - name: porttrack-alerts
+    rules:
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{container="porttrack"}[1m]) > 0.8
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CPU usage is high on PortTrack container"
