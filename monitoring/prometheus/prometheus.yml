@@ -2,10 +2,14 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-  - job_name: 'porttrack'
+  - job_name: 'porttrack-services'
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
       - source_labels: [__meta_kubernetes_pod_label_app]
         action: keep
-        regex: porttrack
+        regex: porttrack-.*
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']

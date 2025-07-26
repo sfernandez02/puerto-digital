@@ -1,10 +1,18 @@
 groups:
   - name: porttrack-alerts
     rules:
-      - alert: HighCPUUsage
-        expr: rate(container_cpu_usage_seconds_total{container="porttrack"}[1m]) > 0.8
+      - alert: HighLatency
+        expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1
         for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Alta latencia en servicios de PortTrack"
+
+      - alert: CPUOverload
+        expr: rate(container_cpu_usage_seconds_total{container=~"porttrack-.*"}[1m]) > 0.85
+        for: 1m
         labels:
           severity: warning
         annotations:
-          summary: "CPU usage is high on PortTrack container"
+          summary: "Uso de CPU elevado en contenedores PortTrack"
