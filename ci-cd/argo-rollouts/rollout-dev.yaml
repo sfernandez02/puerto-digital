@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: porttrack-rollout
+  name: PUERTO-DIGITAL-rollout
   namespace: dev
 spec:
   replicas: 3
@@ -15,14 +15,14 @@ spec:
         - setWeight: 100
   selector:
     matchLabels:
-      app: porttrack
+      app: PUERTO-DIGITAL
   template:
     metadata:
       labels:
-        app: porttrack
+        app: PUERTO-DIGITAL
     spec:
       containers:
-        - name: porttrack
-          image: docker.io/porttrack-app:latest
+        - name: PUERTO-DIGITAL
+          image: docker.io/PUERTO-DIGITAL:latest
           ports:
             - containerPort: 8080

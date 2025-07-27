@@ -1,5 +1,5 @@
 groups:
-  - name: porttrack-alerts
+  - name: PUERTO-DIGITAL-alerts
     rules:
       - alert: HighLatency
         expr: histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le)) > 1
